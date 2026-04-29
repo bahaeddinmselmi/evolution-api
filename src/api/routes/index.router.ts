@@ -9,6 +9,7 @@ import { waMonitor } from '@api/server.module';
 import { configService, Database, Facebook } from '@config/env.config';
 import { fetchLatestWaWebVersion } from '@utils/fetchLatestWaWebVersion';
 import { NextFunction, Request, Response, Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import fs from 'fs';
 import mimeTypes from 'mime-types';
 import path from 'path';
@@ -44,6 +45,16 @@ const telemetry = new Telemetry();
 
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
+// ZAYNAH: tight rate limit on instance creation — 10 per hour per IP.
+// Instance creation opens a new WhatsApp WebSocket; unbounded creation would exhaust sockets.
+export const instanceCreateRateLimit = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { status: 429, error: 'Too Many Requests', response: { message: ['Instance creation limit reached. Try again in an hour.'] } },
+});
+
 // Middleware for metrics IP whitelist
 const metricsIPWhitelist = (req: Request, res: Response, next: NextFunction) => {
   const metricsConfig = configService.get('METRICS');
@@ -55,7 +66,7 @@ const metricsIPWhitelist = (req: Request, res: Response, next: NextFunction) => 
     req.headers['x-forwarded-for'],
   ].filter((ip) => ip !== undefined);
 
-  if (allowedIPs.filter((ip) => clientIPs.includes(ip)) === 0) {
+  if (allowedIPs.filter((ip) => clientIPs.includes(ip)).length === 0) {
     return res.status(403).send('Forbidden: IP not allowed');
   }
 
@@ -214,6 +225,8 @@ router
       facebookUserToken: facebookConfig.USER_TOKEN,
     });
   })
+  // ZAYNAH: tight rate limit on POST /instance/create (10/hour per IP)
+  .post('/instance/create', instanceCreateRateLimit, (req, res, next) => next())
   .use('/instance', new InstanceRouter(configService, ...guards).router)
   .use('/message', new MessageRouter(...guards).router)
   .use('/call', new CallRouter(...guards).router)

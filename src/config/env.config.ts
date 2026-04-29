@@ -464,7 +464,9 @@ export class ConfigService {
         DISABLE_MANAGER: process.env?.SERVER_DISABLE_MANAGER === 'true',
       },
       CORS: {
-        ORIGIN: process.env.CORS_ORIGIN?.split(',') || ['*'],
+        // ZAYNAH: removed wildcard default — CORS_ORIGIN must be set explicitly in the environment.
+        // An empty/missing CORS_ORIGIN means no origins are allowed (safe-fail).
+        ORIGIN: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim()) : [],
         METHODS:
           (process.env.CORS_METHODS?.split(',') as HttpMethods[]) ||
           (['POST', 'GET', 'PUT', 'DELETE'] as HttpMethods[]),

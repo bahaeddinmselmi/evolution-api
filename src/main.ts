@@ -24,6 +24,7 @@ import axios from 'axios';
 import compression from 'compression';
 import cors from 'cors';
 import express, { json, NextFunction, Request, Response, urlencoded } from 'express';
+import rateLimit from 'express-rate-limit';
 import { join } from 'path';
 
 async function initWA() {
@@ -45,10 +46,21 @@ async function bootstrap() {
   await prismaRepository.onModuleInit();
 
   app.use(
+    // ZAYNAH: global rate limiter — 120 req/min per IP (burst-tolerant for normal use,
+    // blocks scraping/abuse). Individual sensitive endpoints have tighter limits below.
+    rateLimit({
+      windowMs: 60 * 1000, // 1 minute
+      max: 120,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: { status: 429, error: 'Too Many Requests', response: { message: ['Rate limit exceeded. Try again in a minute.'] } },
+    }),
     cors({
       origin(requestOrigin, callback) {
         const { ORIGIN } = configService.get<Cors>('CORS');
-        if (ORIGIN.includes('*')) {
+        // ZAYNAH: wildcard '*' default removed — CORS_ORIGIN must be set explicitly.
+        // Same-origin requests (no Origin header) are allowed for server-to-server calls.
+        if (!requestOrigin) {
           return callback(null, true);
         }
         if (ORIGIN.indexOf(requestOrigin) !== -1) {
