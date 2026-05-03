@@ -53,7 +53,11 @@ async function bootstrap() {
       max: 120,
       standardHeaders: true,
       legacyHeaders: false,
-      message: { status: 429, error: 'Too Many Requests', response: { message: ['Rate limit exceeded. Try again in a minute.'] } },
+      message: {
+        status: 429,
+        error: 'Too Many Requests',
+        response: { message: ['Rate limit exceeded. Try again in a minute.'] },
+      },
     }),
     cors({
       origin(requestOrigin, callback) {
