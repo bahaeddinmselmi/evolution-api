@@ -52,7 +52,11 @@ export const instanceCreateRateLimit = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { status: 429, error: 'Too Many Requests', response: { message: ['Instance creation limit reached. Try again in an hour.'] } },
+  message: {
+    status: 429,
+    error: 'Too Many Requests',
+    response: { message: ['Instance creation limit reached. Try again in an hour.'] },
+  },
 });
 
 // Middleware for metrics IP whitelist

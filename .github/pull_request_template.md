@@ -1,41 +1,33 @@
-## 📋 Description
-<!-- Describe your changes in detail -->
+## Description
+<!-- Describe your changes and why they are needed -->
 
-## 🔗 Related Issue
-<!-- Link to the issue this PR addresses -->
+## Related Issue
 Closes #(issue_number)
 
-## 🧪 Type of Change
-<!-- Mark with an `x` all the checkboxes that apply -->
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 📚 Documentation update
-- [ ] 🔧 Refactoring (no functional changes)
-- [ ] ⚡ Performance improvement
-- [ ] 🧹 Code cleanup
-- [ ] 🔒 Security fix
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation update
+- [ ] Refactoring
+- [ ] Performance improvement
+- [ ] Security fix
 
-## 🧪 Testing
-<!-- Describe the testing you performed to verify your changes -->
-- [ ] Manual testing completed
-- [ ] Functionality verified in development environment
+## Testing
+- [ ] Manual testing completed in development environment
 - [ ] No breaking changes introduced
 - [ ] Tested with different connection types (if applicable)
 
-## 📸 Screenshots (if applicable)
-<!-- Add screenshots to help explain your changes -->
+## Checklist
+- [ ] My code follows the project style guidelines (TypeScript strict, ESLint clean)
+- [ ] I have reviewed my own changes
+- [ ] I have commented complex or non-obvious code sections
+- [ ] My changes generate no new ESLint warnings or TypeScript errors (`npm run lint:check && npm run build`)
+- [ ] Database changes include Prisma migrations for both PostgreSQL and MySQL providers
+- [ ] Breaking changes are documented below
 
-## ✅ Checklist
-<!-- Mark with an `x` all the checkboxes that apply -->
-- [ ] My code follows the project's style guidelines
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have manually tested my changes thoroughly
-- [ ] I have verified the changes work with different scenarios
-- [ ] Any dependent changes have been merged and published
+## Breaking Changes
+<!-- If this PR introduces breaking changes, describe them here and what migration steps are needed -->
 
-## 📝 Additional Notes
-<!-- Any additional information, concerns, or questions -->
+## Additional Notes
+<!-- Any context, concerns, or follow-up items -->

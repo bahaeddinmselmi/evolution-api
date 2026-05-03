@@ -1,10 +1,10 @@
 name: Check Code Quality
 
-on: 
+on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, zaynah/security-hardening ]
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, 'zaynah/**' ]
 
 jobs:
   check-lint-and-build:
@@ -31,7 +31,7 @@ jobs:
 
     - name: Install packages
       run: npm ci
-    
+
     - name: Check linting
       run: npm run lint:check
 
